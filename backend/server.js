@@ -19,7 +19,8 @@ app.use(bodyParser.urlencoded({limit:'25mb', extended: true }));
 app.use('/', Book)
 app.use('/account', Account)
 
-const port = 3000 || 5000
+const port = process.env.PORT || 5000
+
 
 const schema = new GraphQLSchema({
     query:query,
