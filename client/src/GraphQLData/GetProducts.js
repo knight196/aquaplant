@@ -31,4 +31,16 @@ query GetProduct($id: Int){
 
 `
 
-export {GetProducts,GetProduct}
+const search_Product = gql `
+
+query search_Product($name:String){
+    searchProduct(name:$name){
+        name,
+        id,
+        image
+    }
+}
+
+`
+
+export {GetProducts,GetProduct,search_Product}

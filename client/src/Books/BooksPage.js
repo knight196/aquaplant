@@ -1,13 +1,22 @@
 import {useState,useEffect} from 'react'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
-import {GetProducts} from '../GraphQLData/GetProducts'
+import {GetProducts, search_Product} from '../GraphQLData/GetProducts'
 import {useQuery} from '@apollo/client'
 import DeleteProduct from './DeleteProduct'
 
 export default function BooksPage() {
 
-  const {data} = useQuery(GetProducts)
+  // const {data} = useQuery(GetProducts)
+
+  const [searchTerm,setSearchTerm] = useState('')
+
+const {data} = useQuery(search_Product, {variables:{name:searchTerm}})
+
+  const handlesearch = (e) => {
+    setSearchTerm(e.target.value)
+  }
+
 
 const Delete = async id  =>{
 try{
@@ -51,8 +60,9 @@ console.log(err)
 <button onClick={logOut}>Logout</button>
 }
 </div>
+<input type="text" className="w-100" placeholder="search your plant" value={searchTerm} onChange={handlesearch}/>
       <div style={{flexWrap:'wrap'}} className="d-flex justify-content-center">
-      {data?.products.map(item =>
+      {data?.searchProduct.map(item =>
       <div className="card text-center" style={{width:'18rem'}}>
         <h5>{item.name}</h5> 
         <img className="card-img-top" src={item.image} alt={item.name}/>

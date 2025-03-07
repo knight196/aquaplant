@@ -1,4 +1,4 @@
-const {GraphQLSchema,GraphQLObjectType,GraphQLList,GraphQLInt} = require('graphql')
+const {GraphQLSchema,GraphQLString,GraphQLObjectType,GraphQLList,GraphQLInt} = require('graphql')
 const db = require('../Mysql')
 const GetProduct = require('./Types/GetProduct')
 
@@ -43,7 +43,24 @@ GROUP BY products.id
                     })
                 })
             }
+        },
+    searchProduct:{
+        type:new GraphQLList(GetProduct),
+        args:{name:{type: GraphQLString}},
+        resolve(parent,args){
+            return new Promise((resolve,reject) => {
+                const query = args.name ? 'select * from products where name like ?'
+                : 'select * from products'
+                const queryParams = args.name ? [`%${args.name}%`] : []
+                db.query(query, queryParams, (err,result) => {
+                    if(err) reject(err)
+                        resolve(result)
+
+                })
+                    }
+            )
         }
+    }
     },
 })
 
